@@ -101,7 +101,15 @@ def get_article(law_id, jo):
     })
     # Check the refusal BEFORE parsing: that notice is HTML, so json.loads
     # would raise first and the useful message would never be reached.
-    if "미신청" in raw:
+    #
+    # Do NOT test the word alone. Statutes contain "미신청" in their own text —
+    # the form tables in 시행규칙 별지 서식 carry a cell reading "│신청│미신청│".
+    # Measured 2026-09-08: a 3.3MB normal response (법인세법 시행규칙, 137 articles)
+    # was rejected wholesale. The real notice is a 1,455-character HTML page, so
+    # demand all three signals before calling it a refusal.
+    if (len(raw) < 8000
+            and not raw.lstrip().startswith(("{", "["))
+            and "미신청된" in raw):
         return ("[조회 실패] 법령ID %s — 조회 조합이 잘못됐습니다. "
                 "인증키 문제가 아니니 키를 다시 입력하지 마세요." % law_id)
     try:
