@@ -3,7 +3,7 @@
 ## 만드는 것
 - 내가 시킨 파일만 C:\krlaw 안에 만든다. 이 실습에서 만드는 것은 다음뿐이다.
     my_law_server.py   MCP 서버
-    setup_key.py       인증키 입력창
+    setup_key.py       인증키 입력창 (저장소에서 받아 그대로 저장)
     07_register.py     등록 프로그램 (저장소에서 받아 그대로 저장)
     등록하기.bat        위 등록 프로그램을 더블클릭으로 실행하는 파일
   (이 규칙 파일과, 실행 중 생기는 law_oc.txt·owner.txt 는 예외)
