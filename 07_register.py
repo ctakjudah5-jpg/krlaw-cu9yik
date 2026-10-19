@@ -47,11 +47,17 @@ def claude_running():
 
 def config_paths():
     """Every config location that could apply on this PC.
-    Store builds keep theirs under LocalCache\\Packages; the plain
-    installer uses %APPDATA%. Write both — the unused one is harmless."""
+    Newer Store builds (2.4x~, 2026-10) read %LOCALAPPDATA%\\Claude-Data\\claude_*;
+    older Store builds keep theirs under LocalCache\\Packages; the plain
+    installer uses %APPDATA%. Write all — the unused ones are harmless."""
     found = []
     local = os.environ.get("LOCALAPPDATA", "")
     if local:
+        # 2026-10-18: a fresh Store install (2.42304) read ONLY this location, so the
+        # old script reported success while the app never saw the entry.
+        for data_dir in glob.glob(os.path.join(local, "Claude-Data", "claude_*")):
+            found.append((os.path.join(data_dir, "claude_desktop_config.json"),
+                          "Store 버전 (새 위치)"))
         for pkg in glob.glob(os.path.join(local, "Packages", "Claude_*")):
             found.append((os.path.join(pkg, "LocalCache", "Roaming", "Claude",
                                        "claude_desktop_config.json"), "Store 버전"))
